@@ -1,0 +1,56 @@
+\documentclass[twocolumn]{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage[backref]{hyperref}
+\usepackage{parskip} % Uncomment this line to modify paragraph spacing
+
+\usepackage{graphicx}
+\usepackage{svg}
+\usepackage{wrapfig}
+
+\usepackage{natbib}
+\usepackage{url}
+
+\usepackage{booktabs}
+\usepackage{array} % Required for specifying column width
+\usepackage{float} % Required for H specifier
+\usepackage{longtable}
+
+\usepackage{amsmath}
+
+
+\setlength{\parskip}{1em}
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+\small
+
+\title{Artela Litepaper: Parallel Execution Stack}
+\author{Artela Team}
+\date{\today}
+
+
+\maketitle
+
+\begin{abstract}
+    Artela blockchain enhances performance through its parallel execution stack, providing applications with predictable performance. This stack consists of a suite of optimization strategies aimed at enabling efficient parallel transaction execution. Initially, it employs a transaction dependency prediction algorithm to group transactions, facilitating their parallel execution across multiple CPU cores. Additionally, it implements a precise preloading mechanism to ensure that transactions perform all I/O operations in-memory cache rather than on the hard drive during execution, while state persistence is carried out asynchronously, thereby contributing to highly efficient read and write operations. Moreover, it optimizes the state storage layer extensively, effectively mitigating performance degradation resulting from data write amplification. Ultimately, the parallel execution and storage characteristics support elastic computing, enabling elastic block space that ensures predictable application performance. These solutions are set to be integrated into the Artela blockchain, with comprehensive insights provided in this lite paper.
+\end{abstract}
+
+% \newpage
+% \tableofcontents
+% \newpage
+
+\input{sections/01-introduction}
+\input{sections/02-predictive-optimistic-execution}
+\input{sections/03-async-preloading}
+\input{sections/04-fast-persistent-storage-layer}
+\input{sections/05-elastic-block-space}
+\input{sections/06-summary}
+% \newpage
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+ 
+
+\end{document}
