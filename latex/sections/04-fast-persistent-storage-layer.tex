@@ -17,17 +17,17 @@ To achieve parallelizable storage, we have implemented a separation strategy bet
 
 The storage architecture is organized as follows (shown in figure \ref{fig:sc_ss_separation}):
 
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{sections/images/sc-ss-separation.png}
+    \caption{Storage architecture}
+    \label{fig:sc_ss_separation}
+\end{figure}
+
 \begin{itemize}
     \item SS DB stores meta-information such as accounts and storage slots but does not retain any trie data. This approach prevents data redundancy and optimizes space utilization.
     \item SC DB records all trie information. Here, the leaf nodes retain only the hash information of accounts and storage slots, eschewing meta-information to avoid redundancy and streamline storage.
 \end{itemize}
-
-\begin{figure*}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{sections/images/sc-ss-separation.png}
-    \caption{Storage architecture}
-    \label{fig:sc_ss_separation}
-\end{figure*}
 
 The design operates as follows:
 
@@ -37,14 +37,7 @@ The design operates as follows:
     \item Disk writing operations and Merkelization processes run concurrently without interference. The former utilizes I/O resources, while the latter depends on CPU resources. During this phase, the modification set is transferred to SC DB to obtain the State Root and generate the Block Header.
 \end{itemize}
 
-To reduce compaction and improve performance of merkelization, SS DB's storage is composed of four database instances (as shown in figure \ref{fig:ss_db}):
-
-\begin{figure*}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{sections/images/ss-db.png}
-    \caption{SS DB's storage instances}
-    \label{fig:ss_db}
-\end{figure*}
+To reduce compaction and improve performance of merkelization, SS DB's storage is composed of four database instances:
 
 \begin{itemize}
     \item Index DB: This database maps new addresses on the chain, converting 20-byte addresses into a 5-byte sequence to compress space, especially in databases like RocksDB/LevelDB that support prefix compression. Newly created addresses, likely to be active on the chain, are encoded in big-endian sequence. This positioning facilitates efficient querying as larger sequences are positioned towards the top of the database file.
@@ -55,18 +48,18 @@ To reduce compaction and improve performance of merkelization, SS DB's storage i
 
 This architecture effectively reduces the conflicts and resource wastage due to compaction in traditional LSM database designs, enhancing transaction execution efficiency by more than 60\% as demonstrated in benchmarks.
 
-\subsection{K-Persist State Commitment Database}
+\subsection{K-Persist SC Database}
 
 The following proposal outlines a universal persistent database design that supports more efficient Merkelization and the capability for multi-version data and SPV queries without compromising hash compatibility. 
 
 Compared to 16-ary Merkle Patricia Tries (MPT) or Sparse Merkle Trees (SMT), binary structures like the IAVL exhibits significant read and write amplification issues. The deeper logical depth of binary trees, as opposed to 16-ary trees, results in more frequent disk I/O operations, which can become a critical issue during Merkelization.
 
-\begin{figure*}[htp]
+\begin{figure}[htp]
     \centering
-    \includegraphics[width=\textwidth]{sections/images/k-persist-layer-node.png}
+    \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-node.png}
     \caption{K-Persist Layer Node}
     \label{fig:k_persist_layer_node}
-\end{figure*}
+\end{figure}
 
 The suboptimal performance of binary or even 16-ary Merkel Trees in blockchain systems is significantly due to frequent disk accesses, which increase the cost of read operations and thus create bottlenecks in the execution layer. This issue also poses one of the major shortcomings for Parallel EVM and Merkelization processes.
 
@@ -105,11 +98,11 @@ To navigate this dilemma, we may adopt a split and merge design strategy (shown 
     \item Node Design: The structure of $k$-layer nodes are similar to the design seen in MySQL's InnoDB, where nodes are part of a B+ tree. This means that like InnoDB, our design involves a bottom-up construction process, but adapted to our specific context with the added complexity of managing the Merkel-based blockchain data.
 \end{itemize}
 
-\begin{figure*}[htp]
+\begin{figure}[htp]
   \centering
-  \includegraphics[width=\textwidth]{sections/images/k-persist-layer-merge-split.png}
+  \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-merge-split.png}
   \caption{K-Layer Node Merge and Split}
   \label{fig:k_layer_node_merge_split}
-\end{figure*}
+\end{figure}
 
 By integrating this adaptive split and merge capability, the K-Persist SC DB can dynamically adjust to the size requirements of the data it stores, ensuring efficient use of storage space and maintaining optimal performance even under varying load conditions. This approach not only enhances the flexibility of the database but also ensures scalability and efficiency in handling large-scale blockchain data.
