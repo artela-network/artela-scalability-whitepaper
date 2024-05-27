@@ -1,4 +1,4 @@
-# Aspect Whitepaper
+# Parallel Execution Litepaper
 
 ## LaTeX Setup on Mac
 This guide will walk you through the steps to set up LaTeX on your Mac.
