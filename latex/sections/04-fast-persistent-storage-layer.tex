@@ -2,7 +2,7 @@
 
 The fast persistent storage layer is designed to address the final two performance challenges encountered in blockchain execution: enabling parallelizable storage and enhancing the efficiency of persisting Merkelized world states into a database. By parallelizing storage, it aligns with the parallel execution capabilities, effectively leveraging multi-core processing benefits. As historical data accumulates, the storage layer faces escalating issues related to write amplification and compaction, which can significantly degrade Merkelization performance.
 
-The fast persistent storage layer serves as an optimized storage solution specifically engineered to augment the efficiency of state storage within the Cosmos SDK. This layer is crafted to ensure seamless compatibility with established Cosmos storage frameworks, such as LevelDB or RocksDB, as well as the IAVL trie, while introducing a substantially enhanced storage strategy. Notably, the existing implementation of Cosmos IAVL storage suffers from performance degradation as the blockchain state expands.
+The fast persistent storage layer serves as an optimized storage solution specifically engineered to augment the efficiency of state storage within the Cosmos SDK. This layer is crafted to ensure seamless compatibility with established Cosmos storage frameworks, such as LevelDB or RocksDB, as well as the IAVL trie\cite{cosmos_iavl}\cite{simmon_avl_trees}, while introducing a substantially enhanced storage strategy. Notably, the existing implementation of Cosmos IAVL storage suffers from performance degradation as the blockchain state expands.
 
 This layer addresses these challenges by optimizing I/O performance for extensive state manipulations and expediting the Merkelization process. It aims to rectify prevalent storage inefficiencies through a series of critical enhancements:
 
@@ -52,14 +52,7 @@ This architecture effectively reduces the conflicts and resource wastage due to 
 
 The following proposal outlines a universal persistent database design that supports more efficient Merkelization and the capability for multi-version data and SPV queries without compromising hash compatibility. 
 
-Compared to 16-ary Merkle Patricia Tries (MPT) or Sparse Merkle Trees (SMT), binary structures like the IAVL exhibits significant read and write amplification issues. The deeper logical depth of binary trees, as opposed to 16-ary trees, results in more frequent disk I/O operations, which can become a critical issue during Merkelization.
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-node.png}
-    \caption{K-Persist Layer Node}
-    \label{fig:k_persist_layer_node}
-\end{figure}
+Compared to 16-ary Merkle Patricia Tries (MPT) \cite{ethereum_patricia_merkle_trie} or Sparse Merkle Trees (SMT) \cite{fichter_sparse_merkle_tree}, binary structures like the IAVL exhibits significant read and write amplification issues. The deeper logical depth of binary trees, as opposed to 16-ary trees, results in more frequent disk I/O operations, which can become a critical issue during Merkelization.
 
 The suboptimal performance of binary or even 16-ary Merkel Trees in blockchain systems is significantly due to frequent disk accesses, which increase the cost of read operations and thus create bottlenecks in the execution layer. This issue also poses one of the major shortcomings for Parallel EVM and Merkelization processes.
 
@@ -79,6 +72,13 @@ To maximize disk and I/O resource utilization for a Merkel Tree, each $k$-layer 
     \end{equation}
       In this context, $B$ represents the block number, $D$ denotes the depth of the $k$-layer node, $S$ indicates the sequence number, and $K$ is the encoded key. All numbers are stored in big-endian format to ensure compatibility with compaction processes.
       Depth refers to the depth of the $k$-layer node and sequence is an incremental unique index, the layout of $k$-layer node is shown as the figure \ref{fig:k_persist_layer_node} illustrates.
+
+      \begin{figure}[htp]
+        \centering
+        \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-node.png}
+        \caption{K-Persist Layer Node}
+        \label{fig:k_persist_layer_node}
+    \end{figure}
 \end{enumerate}
 
 To better delineate the parent-child relationships among $k$-layer nodes, inspired by traditional database systems such as RocksDB and InnoDB, we record the following details in each parent $k$-layer node for all its child $k$-layer nodes (up to $2^k$ nodes):
@@ -93,16 +93,16 @@ While typical search trees, like in the IAVL, inherently contain start key and e
 
 To navigate this dilemma, we may adopt a split and merge design strategy (shown in figure \ref{fig:k_layer_node_merge_split}). This would allow us to divide a large $k$-layer node into multiple smaller $k$-layer node and vice versa. It is important to note that:
 
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-merge-split.png}
+    \caption{K-Layer Node Merge and Split}
+    \label{fig:k_layer_node_merge_split}
+\end{figure}
+
 \begin{itemize}
     \item Depth Consistency: The split $k$-layer node still retain the original depth $d$, as the value $k$ remains unchanged in the definition of each node.
-    \item Node Design: The structure of $k$-layer nodes are similar to the design seen in MySQL's InnoDB, where nodes are part of a B+ tree. This means that like InnoDB, our design involves a bottom-up construction process, but adapted to our specific context with the added complexity of managing the Merkel-based blockchain data.
+    \item Node Design: The structure of $k$-layer nodes are similar to the design seen in MySQL's InnoDB\cite{mysql_innodb_architecture}, where nodes are part of a B+ tree. This means that like InnoDB, our design involves a bottom-up construction process, but adapted to our specific context with the added complexity of managing the Merkel-based blockchain data.
 \end{itemize}
-
-\begin{figure}[htp]
-  \centering
-  \includegraphics[width=\columnwidth]{sections/images/k-persist-layer-merge-split.png}
-  \caption{K-Layer Node Merge and Split}
-  \label{fig:k_layer_node_merge_split}
-\end{figure}
 
 By integrating this adaptive split and merge capability, the K-Persist SC DB can dynamically adjust to the size requirements of the data it stores, ensuring efficient use of storage space and maintaining optimal performance even under varying load conditions. This approach not only enhances the flexibility of the database but also ensures scalability and efficiency in handling large-scale blockchain data.

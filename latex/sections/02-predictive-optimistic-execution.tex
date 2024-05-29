@@ -4,9 +4,9 @@
 
 We propose \textbf{Predictive Optimistic Execution}, an approach designed to enhance optimistic execution algorithms by predicting transaction dependencies with high accuracy. This method reduces conflict rates and boosts the efficiency of parallel executions.
 
-Traditional optimistic execution algorithms face difficulties with high-conflict blocks, necessitating the use of preemptive strategies in many blockchain platforms with parallel EVMs. So when using it practically, optimization need to be implemented. Our approach extends the optimistic execution by using hints of transaction and contract to predict dependencies, thereby optimizing parallel execution groups.
+Traditional optimistic execution algorithms face difficulties with high-conflict blocks, which will lead to a large amount of redundant execution of related transactions and a significant decline in the efficiency of parallel EVMs. 
 
-We introduce an \textbf{optimistic execution methodology} (Figure \ref{fig:predictive_optimistic_execution}) complemented by a \textbf{prediction module}. This module proactively analyzes transaction dependencies based on hints associated with transactions and contracts, thereby forming execution groups for transactions. A \textbf{hint table} is incorporated, which logs the state access information of transactions and contracts. The hint table serves as the input for the prediction algorithm; these hints are dynamically accumulated through analysis of historical transaction execution processes and do not require user input.
+Artela introduce an \textbf{optimistic execution methodology} (Figure \ref{fig:predictive_optimistic_execution}) complemented by a \textbf{prediction module}. This module proactively analyzes transaction dependencies based on hints associated with transactions and contracts, thereby forming execution groups for transactions to reduce the possible re-execution. A hint table is incorporated, which logs the state access information of transactions and contracts. The hint table serves as the input for the prediction algorithm; these hints are dynamically accumulated through analysis of historical transaction execution processes and do not require user input.
 
 \begin{figure*}[htp]
 \centering
@@ -17,9 +17,9 @@ We introduce an \textbf{optimistic execution methodology} (Figure \ref{fig:predi
 
 \subsection{Optimistic Execution}
 
-Our algorithm employs "Optimistic Execution," a strategy where transactions are processed speculatively, operating under the initial assumption of conflict absence. Each transaction maintains a private version of the state, recording modifications without immediate finalization. Upon completion of the transaction, a subsequent validation phase examines for potential conflicts against global state alterations effected by concurrent transactions within the same interval. Any detected conflicts result in the abortion and re-execution of the transaction. 
+The implementation of parallel execution lies in Optimistic Execution, a strategy where transactions are speculatively processed under the initial assumption that there are no conflicts. Each transaction maintains a private version of the state, recording modifications without immediate finalization. After the transaction is executed the transaction, a subsequent validation phase will examine for potential conflicts against global state alterations effected by concurrent transactions within the same interval. Any detected conflicts will result in the re-execution of the transaction. 
 
-This approach leverages a multi-version data structure and upholds a pre-defined serialization order to ensure data consistency and integrity. The refinement of the optimistic execution algorithm will be integrated through enhancements in BlockSTM.
+This approach leverages a multi-version data structure and upholds a pre-defined serialization order to ensure data consistency and integrity. The refinement of the optimistic execution algorithm will be integrated through enhancements in Block-STM\cite{gelashvili2022blockstm}.
 
 \subsection{Hint table}
 
@@ -29,7 +29,7 @@ In this section, we will discuss the current challenges associated with existing
 
 We will now discuss the current solutions similar to hint table and explain why they are inadequate for parallel execution needs.
 
-\textbf{EIP-2930 (Optional Access Lists).} EIP-2930 introducing the ability for users to submit their transactions' read and write sets, but since this is not mandatory, only a small fraction of transactions are using it (\href{https://arxiv.org/html/2312.06574v1#:~:text=Analyzing%20a%20full%20month%20of,%24%205%20Mio)%20per%20year.}{1.46\%} until December 2023) utilize this feature.
+\textbf{EIP-2930 (Optional Access Lists)\cite{buterin2020eip2930}.} EIP-2930 introducing the ability for users to submit their transactions' read and write sets, but since this is not mandatory, only a small fraction of transactions are using it (1.46\% until December 2023\cite{heimbach2023dissecting}) utilize this feature.
 
 \textbf{Transaction Pre-Execution.} Transactions are initially sent to pre-execution nodes (non-Validator nodes), where these nodes collect potential read-write sets through pre-execution, a method fundamentally employed by systems such as Sui due to its cost-effectiveness. However, this approach necessitates the addition of protocols between non-Validator and Validator nodes within the network.
 
@@ -91,4 +91,6 @@ This comprehensive overview delineates the structure, generation, and utilizatio
 
 \subsection{AI-driven Hints Generator}
 
-Unlike other solutions that require developers to predefine hints, the Hint table does not need to be manually generated by developers. It supports the introduction of a specific AI model to analyze the execution of past historical transactions and automatically generate an accurate Hint table. Therefore, transactions on the Artela blockchain cannot be executed with a high degree of parallelism from the start; there will be a warm-up process. As the Hint table is gradually refined, the parallelism of the chain will automatically improve.
+Unlike other solutions that require developers to manually generate hints, our approach automates the creation of the Hint table. Utilizing a specific AI model, this solution analyzes historical transaction data to automatically generate an accurate Hint table. This model operates off-chain, and the generated Hint table is synchronized with the network nodes. Additionally, the model can incorporate data from other EVM-compatible chains, leveraging similarities in protocols to enhance its accuracy.
+
+Since the Hint table is updated based on historical data, initial transactions on the Artela blockchain may not benefit from high parallelism; a warm-up period is required. As the Hint table becomes more refined through ongoing updates, the parallelism of the chain will naturally improve.

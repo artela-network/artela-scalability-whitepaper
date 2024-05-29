@@ -1,0 +1,10 @@
+\backcite {artela2023}{{1}{1}{section.1}}
+\backcite {ethereum2020evm}{{1}{1}{section.1}}
+\backcite {gelashvili2022blockstm}{{2}{2.1}{subsection.2.1}}
+\backcite {buterin2020eip2930}{{2}{2.2}{subsection.2.2}}
+\backcite {heimbach2023dissecting}{{2}{2.2}{subsection.2.2}}
+\backcite {cosmos_iavl}{{4}{4}{section.4}}
+\backcite {simmon_avl_trees}{{4}{4}{section.4}}
+\backcite {ethereum_patricia_merkle_trie}{{5}{4.2}{subsection.4.2}}
+\backcite {fichter_sparse_merkle_tree}{{5}{4.2}{subsection.4.2}}
+\backcite {mysql_innodb_architecture}{{6}{4.2}{figure.5}}
