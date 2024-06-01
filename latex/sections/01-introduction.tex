@@ -13,6 +13,6 @@ This paper delves into the implementation of the parallel execution stack, which
 \begin{enumerate}
   \item \textbf{Predictive optimistic execution:} enhances optimistic parallel execution by accurately predicting transaction dependencies to reduce conflicts. It uses a hint table that logs state access information from historical transactions to form optimized execution groups without user input.
   \item \textbf{Async preloading:} an async I/O solution. It leverages a predictive algorithm to preload transaction states into memory before execution, and streamlines data access to eliminate I/O bottlenecks during execution.
-  \item \textbf{Fast persistent storage layer:} an async I/O solution. It leverages a predictive algorithm to preload transaction states into memory before execution, and streamlines data access to eliminate I/O bottlenecks during execution.
+  \item \textbf{Parallel storage:} a solution that enabling parallelizable storage and enhancing the efficiency of persisting Merkelized world states into a database.
   \item \textbf{Elastic block space:} the design refers to a dynamically scalable block space that provides independent and protocol-guaranteed block space for dApps with high transaction throughput needs, ensuring predictable performance. When a new EBS is created, dedicated resources are elastically allocated to dApps, ensuring efficient resource utilization and accommodating varying transaction volumes.
 \end{enumerate}
