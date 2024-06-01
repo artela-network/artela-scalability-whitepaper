@@ -6,7 +6,7 @@ In this paper, we present the design of the parallel execution stack, which aims
 
 While the Ethereum Virtual Machine (EVM)\cite{ethereum2020evm} has gained widespread adoption and offers robust functionalities, EVM developers still face significant limitations. Its single-threaded execution model hampers scalability by processing transactions sequentially, leading to network congestion and high gas fees during peak periods. Furthermore, the deterministic nature of the EVM, while ensuring consistency, constrains its adaptability for handling complex real-world scenarios. Additionally, the absence of native support for parallel processing in the EVM inhibits its integration with cutting-edge applications.
 
-To tackle these challenges, Artela introduces EVM++, an advanced iteration of the EVM. EVM++ is engineered to improve both the scalability and extensibility of the EVM blockchain while preserving compatibility with its execution model. At the heart of EVM++ lies the parallel execution stack, the key solution for achieving scalability.
+To tackle these challenges, Artela introduces EVM++\cite{artela_evm_plus_plus}, an advanced iteration of the EVM. EVM++ is engineered to improve both the scalability and extensibility of the EVM blockchain while preserving compatibility with its execution model. At the heart of EVM++ lies the parallel execution stack, the key solution for achieving scalability.
 
 This paper delves into the implementation of the parallel execution stack, which comprises four sub-modules:
 
