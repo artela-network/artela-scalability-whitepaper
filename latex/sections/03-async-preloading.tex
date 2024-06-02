@@ -4,7 +4,7 @@
 
 To maximize the use of the CPU's concurrent computational capabilities and prevent I/O from becoming the execution bottleneck, we propose "Async Preloading", which is based on a predictive algorithm. This approach proactively preloads the states required for transaction execution into memory beforehand, thereby eliminating the need for I/O access during transaction execution.
 
-With the transition to parallel transaction execution, the potential bottleneck during execution shifts to states’ I/O. The performance of a block is contingent on its slowest batch, which may suffer from higher computational demands or extended "waiting" times, primarily from disk reads for accounts and storage slots. In Artela, advanced predictive algorithms is designed to address computational bottlenecks by offering predictive algorithms address computational bottlenecks by offering relatively optimal solutions, while I/O delays are mitigated through Async Preloading combined with the hint table, enhancing overall system performance. The working process of async preloading is illustrated in figure \ref{fig:async_preloading}.
+With the transition to parallel transaction execution, the potential bottleneck during execution shifts to states' I/O. The performance of a block is contingent on its slowest batch, which may suffer from higher computational demands or extended "waiting" times, primarily from disk reads for accounts and storage slots. In Artela, a predictive algorithms is designed to address computational bottlenecks by offering predictive algorithms address computational bottlenecks by offering relatively optimal solutions, while I/O delays are mitigated through Async Preloading combined with the hint table, enhancing overall system performance. The working process of async preloading is illustrated in figure \ref{fig:async_preloading}.
 
 \begin{figure}[htp]
   \centering
@@ -13,9 +13,7 @@ With the transition to parallel transaction execution, the potential bottleneck 
   \label{fig:async_preloading}
 \end{figure}
 
-Before executing every transaction, \textbf{Optimistic Preloading} is initiated, loading only the specified storage into memory according to static hints.
-
-Following the Optimistic Preloading, \textbf{Pessimistic Preloading} commences, loading all potential storage into memory in accordance with dynamic hints.
+Before executing every transaction, \textbf{Optimistic Preloading} is initiated, loading only the specified storage into memory according to static hints. Following the Optimistic Preloading, \textbf{Pessimistic Preloading} commences, loading all potential storage into memory in accordance with dynamic hints.
 
 After completing the async preloading, all the necessary state storage is loaded into memory. Subsequent execution will be entirely based on memory, which is expected to enhance I/O performance by a factor of \textbf{10 to 1,000 times}.
 
