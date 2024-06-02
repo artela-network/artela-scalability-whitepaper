@@ -41,12 +41,12 @@ The Hint table is engineered to adeptly address distinct challenges associated w
 
 The hint table will categorize the states of contracts into the following categories:
 
-\textbf{Input-unrelated States:} These states are universally accessible and generally easier to be analyzed, for example the `totalSupply` state variable in an ERC20 contract.
+\textbf{Input-unrelated States:} These states are universally accessible and generally easier to be analyzed, for example the \textbf{totalSupply} state variable in an ERC20 contract.
 
-\textbf{Input-related States:} These states are dynamic; they are typically associated with transaction data.
+\textbf{Input-related States:} These states are dynamic, they are typically associated with transaction data.
 \begin{itemize}
-\item \textbf{Account-related States:} Directly connected to specific accounts, these states relate to transaction fields like \textbf{`tx.from`} and \textbf{`tx.to`}.
-\item \textbf{Miscellaneous States:} These are dynamically linked states whose relationships are not consistently determinable, often seen in complex contracts like Uniswap V4's \textbf{`positions`} mapping.
+\item \textbf{Account-related States:} Directly connected to specific accounts, these states relate to transaction fields like \textbf{tx.from} and \textbf{tx.to}.
+\item \textbf{Miscellaneous States:} These are dynamically linked states whose relationships are not consistently determinable, often seen in complex contracts like Uniswap V4's \textbf{positions} mapping.
 \end{itemize}
 \subsubsection{Types of Hints}
 
