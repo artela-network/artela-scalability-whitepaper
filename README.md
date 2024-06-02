@@ -1,4 +1,4 @@
-# Parallel Execution Litepaper
+# Artela Scalability Whitepaper
 
 ## LaTeX Setup on Mac
 This guide will walk you through the steps to set up LaTeX on your Mac.
@@ -27,10 +27,10 @@ The paper is located in the build directory.
 ├── README.md
 └── latex
     ├── build
-    │   ├── litepaper.brf
-    │   └── litepaper.pdf
+    │   ├── Artela-scalability-whitepaper.brf
+    │   └── Artela-scalability-whitepaper.pdf
     ├── build.sh
     ├── references.bib
     ├── sections
-    └── litepaper.tex
+    └── Artela-scalability-whitepaper.tex
 ```
